@@ -567,14 +567,17 @@ async function loadEmailConfigStatus() {
     const res = await fetch('/api/config/email');
     if (!res.ok) return;
     const data = await res.json();
-    updateConfigBadge(data.configured, data.sender_email);
+    updateConfigBadge(data.configured, data.sender_email, data.resend_active);
   } catch {}
 }
 
-function updateConfigBadge(configured, email) {
+function updateConfigBadge(configured, email, resendActive) {
   const badge = document.getElementById('config-status-badge');
   if (!badge) return;
-  if (configured) {
+  if (resendActive) {
+    badge.textContent = '⚡ Resend API active';
+    badge.className = 'cfg-badge cfg-ok';
+  } else if (configured) {
     badge.textContent = `✓ ${email}`;
     badge.className = 'cfg-badge cfg-ok';
   } else {
@@ -610,7 +613,7 @@ async function saveEmailConfig() {
     if (!res.ok) { msg.textContent = data.detail || 'Save failed.'; msg.className = 'cfg-msg err'; return; }
     msg.textContent = '✓ Saved! Config stored locally.';
     msg.className = 'cfg-msg ok';
-    updateConfigBadge(true, email);
+    updateConfigBadge(true, email, false);
     document.getElementById('cfg-pass').value = '';
     setTimeout(() => { toggleConfig(); }, 1200);
   } catch (e) {

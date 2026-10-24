@@ -19,7 +19,7 @@ from modules.data_cleaner     import clean_contacts
 from modules.data_merger      import merge_csv_files
 from modules.file_organizer   import organize_folder
 from modules.report_generator import generate_sales_report
-from modules.email_sender     import send_email
+from modules.email_sender     import send_email, send_via_resend
 
 BASE   = Path(__file__).parent
 SAMPLE = BASE / "sample_data"
@@ -259,8 +259,12 @@ def _load_cfg() -> dict:
 @app.get("/api/config/email")
 def get_email_config():
     cfg = _load_cfg()
-    return {"configured": cfg.get("configured", False),
-            "sender_email": cfg.get("sender_email", "")}
+    resend_key = os.environ.get("RESEND_API_KEY") or cfg.get("resend_api_key")
+    return {
+        "configured":   cfg.get("configured", False) or bool(resend_key),
+        "sender_email": cfg.get("sender_email", ""),
+        "resend_active": bool(resend_key),
+    }
 
 @app.post("/api/config/email")
 def save_email_config(data: EmailConfigIn):
@@ -374,21 +378,29 @@ def send_test_email(data: SendTestIn):
 </table>
 </body>
 </html>"""
+    subject = "You just received an automated email — BusinessAutoKit Demo 🚀"
+    resend_key = os.environ.get("RESEND_API_KEY") or cfg.get("resend_api_key")
     try:
-        result = send_email(
-            sender_email    = cfg["sender_email"],
-            sender_password = cfg["sender_password"],
-            recipient_email = data.recipient_email,
-            subject         = "You just received an automated email — BusinessAutoKit Demo 🚀",
-            body            = plain,
-            html_body       = html,
-            smtp_host       = cfg.get("smtp_host", "smtp.gmail.com"),
-            smtp_port       = cfg.get("smtp_port", 465),
-            demo_mode       = False,
-        )
+        if resend_key:
+            # Hosted path: use Resend HTTPS API (works on Render free tier)
+            from_addr = cfg.get("sender_email", "onboarding@resend.dev")
+            send_via_resend(resend_key, from_addr, data.recipient_email, subject, html, plain)
+        else:
+            # Local path: use Gmail SMTP
+            send_email(
+                sender_email    = cfg["sender_email"],
+                sender_password = cfg["sender_password"],
+                recipient_email = data.recipient_email,
+                subject         = subject,
+                body            = plain,
+                html_body       = html,
+                smtp_host       = cfg.get("smtp_host", "smtp.gmail.com"),
+                smtp_port       = cfg.get("smtp_port", 465),
+                demo_mode       = False,
+            )
         return {"sent": True, "to": data.recipient_email,
                 "message": f"Email delivered to {data.recipient_email}!",
-                "subject": "You just received an automated email — BusinessAutoKit Demo 🚀"}
+                "subject": subject}
     except Exception as e:
         raise HTTPException(500, detail=f"Send failed: {e}")
 

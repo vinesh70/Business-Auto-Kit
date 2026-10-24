@@ -1,7 +1,6 @@
 """
 Email Sender
-Sends personalised emails with optional file attachments via SMTP.
-Supports Gmail, Outlook and any standard SMTP server.
+Sends personalised emails via Resend API (hosted) or Gmail SMTP (local).
 Use DEMO_MODE=True to preview emails without actually sending them.
 """
 import smtplib
@@ -9,6 +8,37 @@ import ssl
 from email.message import EmailMessage
 from pathlib import Path
 from datetime import datetime
+
+
+def send_via_resend(
+    api_key: str,
+    from_email: str,
+    recipient_email: str,
+    subject: str,
+    html_body: str,
+    plain_body: str = "",
+) -> dict:
+    """Send via Resend HTTP API — works on Render/cloud (no SMTP needed)."""
+    import urllib.request, json as _json
+    payload = _json.dumps({
+        "from":    from_email,
+        "to":      [recipient_email],
+        "subject": subject,
+        "html":    html_body,
+        "text":    plain_body,
+    }).encode()
+    req = urllib.request.Request(
+        "https://api.resend.com/emails",
+        data=payload,
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type":  "application/json",
+        },
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=15) as resp:
+        result = _json.loads(resp.read())
+    return {"sent": True, "id": result.get("id"), "to": recipient_email, "subject": subject}
 
 
 def send_email(
