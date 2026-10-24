@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BusinessAutoKit — Python Automation Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-icon">🚀</div>
+    <div>
+      <div class="brand-name">BusinessAutoKit</div>
+      <div class="brand-sub">Python Automation Suite · v2.0</div>
+    </div>
+  </div>
+
+  <div class="nav-label-section">LIVE DEMOS</div>
+  <nav class="sidebar-nav">
+    <button class="nav-item active" data-demo="organizer">
+      <span class="ni-icon">📁</span>
+      <span class="ni-text">File Organizer</span>
+      <span class="ni-num">01</span>
+    </button>
+    <button class="nav-item" data-demo="merger">
+      <span class="ni-icon">🔗</span>
+      <span class="ni-text">Data Merger</span>
+      <span class="ni-num">02</span>
+    </button>
+    <button class="nav-item" data-demo="cleaner">
+      <span class="ni-icon">🧹</span>
+      <span class="ni-text">Data Cleaner</span>
+      <span class="ni-num">03</span>
+    </button>
+    <button class="nav-item" data-demo="report">
+      <span class="ni-icon">📊</span>
+      <span class="ni-text">Report Generator</span>
+      <span class="ni-num">04</span>
+    </button>
+    <button class="nav-item" data-demo="email">
+      <span class="ni-icon">📧</span>
+      <span class="ni-text">Email Automation</span>
+      <span class="ni-num">05</span>
+    </button>
+  </nav>
+
+  <div class="sidebar-spacer"></div>
+
+  <div class="sidebar-cta">
+    <div class="cta-title">Need this for your business?</div>
+    <div class="cta-body">Custom Python automation — fast delivery, clean code, production-ready.</div>
+    <a href="https://www.fiverr.com" target="_blank" class="cta-btn">
+      <span>✦</span> Hire me on Fiverr
+    </a>
+  </div>
+
+  <div class="sidebar-author">
+    <div class="author-avatar">V</div>
+    <div>
+      <div class="author-name">Vinesh Ryapak</div>
+      <div class="author-tag">B.Tech IT · Mumbai · AWS CLF</div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══════════════════ MAIN ═══════════════════ -->
+<main class="main">
+
+  <!-- ── Demo 1: File Organizer ── -->
+  <section class="demo-section active" id="demo-organizer">
+    <div class="demo-header">
+      <div class="demo-badge">⚡ Demo 1 of 5</div>
+      <div class="demo-title-row">
+        <span class="demo-emoji">📁</span>
+        <div>
+          <h1 class="demo-title">File Organizer</h1>
+          <p class="demo-desc">Dump a folder full of mixed files — images, PDFs, CSVs, ZIPs, code — and watch this script sort every file into the right subfolder automatically in under a second.</p>
+          <div class="demo-caps">
+            <span class="demo-cap indigo">🗂️ Auto Categorise</span>
+            <span class="demo-cap green">📊 Size Analytics</span>
+            <span class="demo-cap amber">⚠️ Duplicate Detection</span>
+            <span class="demo-cap cyan">🌳 Folder Tree</span>
+            <span class="demo-cap violet">🐍 pathlib</span>
+            <span class="demo-cap rose">⚡ Sub-second</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col" id="cols-organizer">
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title">📂 Sample Input — 16 Mixed Files</span>
+          <span class="pill" id="organizer-count">Loading…</span>
+        </div>
+        <div class="file-grid" id="organizer-sample"></div>
+        <button class="btn-run" id="btn-organizer" onclick="runDemo('organizer')">
+          <span class="spin" id="spin-organizer"></span>
+          ▶ &nbsp;Run File Organizer
+        </button>
+      </div>
+
+      <div class="panel result-panel hidden" id="result-organizer">
+        <div class="panel-head">
+          <span class="panel-title">✅ Organised Output</span>
+        </div>
+        <div id="organizer-result-body"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Demo 2: Data Merger ── -->
+  <section class="demo-section" id="demo-merger">
+    <div class="demo-header">
+      <div class="demo-badge">⚡ Demo 2 of 5</div>
+      <div class="demo-title-row">
+        <span class="demo-emoji">🔗</span>
+        <div>
+          <h1 class="demo-title">Data Merger</h1>
+          <p class="demo-desc">Three separate monthly CSV files (Jan, Feb, Mar) get merged into one master file — duplicates removed, rows sorted by date — ready for reporting or further analysis.</p>
+          <div class="demo-caps">
+            <span class="demo-cap indigo">🔗 Smart Merge</span>
+            <span class="demo-cap green">🔁 Deduplication</span>
+            <span class="demo-cap amber">📅 Date Sort</span>
+            <span class="demo-cap cyan">📈 Revenue Roll-up</span>
+            <span class="demo-cap violet">🐍 pandas</span>
+            <span class="demo-cap rose">📊 Per-file Stats</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col" id="cols-merger">
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title">📄 Sample Input — 3 Monthly Sales CSVs</span>
+        </div>
+        <div class="tab-bar" id="merger-tabs"></div>
+        <div class="table-wrap" id="merger-sample"></div>
+        <button class="btn-run" id="btn-merger" onclick="runDemo('merger')">
+          <span class="spin" id="spin-merger"></span>
+          ▶ &nbsp;Merge 3 Files → 1 Master
+        </button>
+      </div>
+
+      <div class="panel result-panel hidden" id="result-merger">
+        <div class="panel-head">
+          <span class="panel-title">✅ Merged Master File</span>
+          <a class="btn-dl" href="/api/download/sales_merged.csv">⬇ Download</a>
+        </div>
+        <div id="merger-result-body"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Demo 3: Data Cleaner ── -->
+  <section class="demo-section" id="demo-cleaner">
+    <div class="demo-header">
+      <div class="demo-badge">⚡ Demo 3 of 5</div>
+      <div class="demo-title-row">
+        <span class="demo-emoji">🧹</span>
+        <div>
+          <h1 class="demo-title">Data Cleaner</h1>
+          <p class="demo-desc">A messy contacts sheet full of ALL CAPS names, extra spaces, inconsistent phone formats and duplicate rows gets cleaned automatically. See the quality score jump, before and after.</p>
+          <div class="demo-caps">
+            <span class="demo-cap indigo">📏 Quality Score</span>
+            <span class="demo-cap green">📞 Phone Normalise</span>
+            <span class="demo-cap amber">📧 Email Fix</span>
+            <span class="demo-cap cyan">🔤 Name Casing</span>
+            <span class="demo-cap violet">🔁 Dedupe</span>
+            <span class="demo-cap rose">🐍 pandas + regex</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:20px">
+      <div class="panel-head">
+        <span class="panel-title">⚠️ Messy Input Data — 14 rows with problems</span>
+      </div>
+      <div class="table-wrap" id="cleaner-sample"></div>
+      <button class="btn-run" id="btn-cleaner" onclick="runDemo('cleaner')">
+        <span class="spin" id="spin-cleaner"></span>
+        🧹 &nbsp;Clean the Data
+      </button>
+    </div>
+
+    <div class="before-after hidden" id="result-cleaner">
+      <div class="panel">
+        <div class="panel-head"><span class="panel-title">❌ Before — Raw Messy Data</span></div>
+        <div class="table-wrap" id="cleaner-before"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title">✅ After — Clean Data</span>
+          <a class="btn-dl" href="/api/download/contacts_clean.csv">⬇ Download</a>
+        </div>
+        <div class="table-wrap" id="cleaner-after"></div>
+      </div>
+    </div>
+    <div class="stats-row hidden" id="cleaner-stats"></div>
+  </section>
+
+  <!-- ── Demo 4: Report Generator ── -->
+  <section class="demo-section" id="demo-report">
+    <div class="demo-header">
+      <div class="demo-badge">⚡ Demo 4 of 5</div>
+      <div class="demo-title-row">
+        <span class="demo-emoji">📊</span>
+        <div>
+          <h1 class="demo-title">Report Generator</h1>
+          <p class="demo-desc">Sales data gets turned into a beautiful, self-contained HTML report — summary KPIs, leaderboard, monthly trend chart, product breakdown. One file you can email or share instantly.</p>
+          <div class="demo-caps">
+            <span class="demo-cap indigo">📊 KPI Dashboard</span>
+            <span class="demo-cap green">🏆 Leaderboard</span>
+            <span class="demo-cap amber">📈 Trend Chart</span>
+            <span class="demo-cap cyan">🔮 Forecast</span>
+            <span class="demo-cap violet">📄 PDF Export</span>
+            <span class="demo-cap rose">📑 PPTX Export</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col" id="cols-report">
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title">📈 Sample Sales Data — 90 rows, Jan–Mar 2024</span>
+        </div>
+        <div class="table-wrap" id="report-sample"></div>
+        <button class="btn-run" id="btn-report" onclick="runDemo('report')">
+          <span class="spin" id="spin-report"></span>
+          📊 &nbsp;Generate Report
+        </button>
+      </div>
+
+      <div class="panel result-panel hidden" id="result-report">
+        <div class="panel-head">
+          <span class="panel-title">✅ Report Ready</span>
+        </div>
+        <div id="report-stats"></div>
+        <div class="report-actions">
+          <button class="btn-open-report" id="btn-open-report" onclick="openReport()">
+            📊 &nbsp;Open Full Report in New Tab &nbsp;↗
+          </button>
+          <div class="export-group">
+            <span class="export-label">Export as:</span>
+            <button class="btn-export" id="btn-export-pdf" onclick="exportReport('pdf')">
+              <span class="spin" id="spin-export-pdf"></span>📄 PDF
+            </button>
+            <button class="btn-export btn-export-pptx" id="btn-export-pptx" onclick="exportReport('pptx')">
+              <span class="spin" id="spin-export-pptx"></span>📑 PowerPoint
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Demo 5: Email Automation ── -->
+  <section class="demo-section" id="demo-email">
+    <div class="demo-header">
+      <div class="demo-badge">⚡ Demo 5 of 5</div>
+      <div class="demo-title-row">
+        <span class="demo-emoji">📧</span>
+        <div>
+          <h1 class="demo-title">Email Automation</h1>
+          <p class="demo-desc">A contacts list gets personalised emails — name, company, subject all auto-filled from the spreadsheet. Send 500 emails in seconds. Real Gmail send supported via App Password.</p>
+          <div class="demo-caps">
+            <span class="demo-cap indigo">🔀 Personalisation</span>
+            <span class="demo-cap green">📤 Real Gmail Send</span>
+            <span class="demo-cap amber">👁️ Preview Mode</span>
+            <span class="demo-cap cyan">🔒 App Password</span>
+            <span class="demo-cap violet">🐍 smtplib + SSL</span>
+            <span class="demo-cap rose">⚡ 500 Emails/min</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col" id="cols-email">
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title">👥 Sample Contacts — 5 recipients</span>
+        </div>
+        <div class="table-wrap" id="email-sample"></div>
+
+        <div class="template-preview">
+          <div class="tp-label">✉️ Email Template</div>
+          <div class="tp-subject">Subject: Your Weekly Report is Ready, <strong>{name}</strong>!</div>
+          <div class="tp-body">Hi <strong>{name}</strong>, your report for <strong>{company}</strong> is ready and attached. Click to review your performance this week…</div>
+        </div>
+
+        <!-- Gmail Setup Accordion -->
+        <div class="email-config-wrap" id="email-config-wrap">
+          <button class="config-toggle" id="config-toggle" onclick="toggleConfig()">
+            ⚙️ Gmail Setup &nbsp;<span id="config-status-badge" class="cfg-badge cfg-not">Not configured</span>
+            <span class="toggle-arrow" id="toggle-arrow">▾</span>
+          </button>
+          <div class="config-body" id="config-body">
+            <div class="cfg-help">
+              Use a <strong>Gmail App Password</strong> — not your regular password. Your credentials are stored locally and never leave your machine.
+              <br><a href="https://myaccount.google.com/apppasswords" target="_blank" class="cfg-link">Get an App Password here ↗</a>
+            </div>
+            <div class="cfg-field">
+              <label class="cfg-label">Gmail Address</label>
+              <input type="email" id="cfg-email" class="cfg-input" placeholder="you@gmail.com">
+            </div>
+            <div class="cfg-field">
+              <label class="cfg-label">App Password</label>
+              <input type="password" id="cfg-pass" class="cfg-input" placeholder="xxxx xxxx xxxx xxxx">
+            </div>
+            <button class="btn-cfg-save" onclick="saveEmailConfig()">
+              <span class="spin" id="spin-cfg"></span>💾 &nbsp;Save Config
+            </button>
+            <div class="cfg-msg" id="cfg-msg"></div>
+          </div>
+        </div>
+
+        <!-- Real send -->
+        <div class="real-send-wrap">
+          <label class="cfg-label">📤 Send a Real Proof Email To:</label>
+          <div class="real-send-row">
+            <input type="email" id="proof-email" class="cfg-input" placeholder="client@example.com">
+            <button class="btn-real-send" id="btn-real-send" onclick="sendRealEmail()">
+              <span class="spin" id="spin-real"></span>Send Now
+            </button>
+          </div>
+          <div class="send-result" id="send-result"></div>
+        </div>
+
+        <button class="btn-run btn-email" id="btn-email" onclick="runDemo('email')">
+          <span class="spin" id="spin-email"></span>
+          📧 &nbsp;Preview All 5 Emails
+        </button>
+      </div>
+
+      <div class="panel result-panel hidden" id="result-email">
+        <div class="panel-head">
+          <span class="panel-title">✅ Personalised Email Previews</span>
+        </div>
+        <div id="email-result-body"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
