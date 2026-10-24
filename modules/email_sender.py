@@ -10,6 +10,8 @@ from pathlib import Path
 from datetime import datetime
 
 
+_FREE_DOMAINS = {"gmail.com","yahoo.com","hotmail.com","outlook.com","live.com","icloud.com"}
+
 def send_via_resend(
     api_key: str,
     from_email: str,
@@ -19,9 +21,14 @@ def send_via_resend(
     plain_body: str = "",
 ) -> dict:
     """Send via Resend HTTP API — works on Render/cloud (no SMTP needed)."""
-    import urllib.request, json as _json
+    import urllib.request, urllib.error, json as _json
+
+    # Free-email domains are not verified on Resend — use their test sender
+    domain = from_email.split("@")[-1].lower()
+    sender = from_email if domain not in _FREE_DOMAINS else "BusinessAutoKit Demo <onboarding@resend.dev>"
+
     payload = _json.dumps({
-        "from":    from_email,
+        "from":    sender,
         "to":      [recipient_email],
         "subject": subject,
         "html":    html_body,
@@ -36,8 +43,17 @@ def send_via_resend(
         },
         method="POST",
     )
-    with urllib.request.urlopen(req, timeout=15) as resp:
-        result = _json.loads(resp.read())
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            result = _json.loads(resp.read())
+    except urllib.error.HTTPError as e:
+        body = e.read().decode(errors="replace")
+        try:
+            msg = _json.loads(body).get("message", body)
+        except Exception:
+            msg = body
+        raise RuntimeError(f"Resend API {e.code}: {msg}") from None
+
     return {"sent": True, "id": result.get("id"), "to": recipient_email, "subject": subject}
 
 
