@@ -567,15 +567,15 @@ async function loadEmailConfigStatus() {
     const res = await fetch('/api/config/email');
     if (!res.ok) return;
     const data = await res.json();
-    updateConfigBadge(data.configured, data.sender_email, data.resend_active);
+    updateConfigBadge(data.configured, data.sender_email, data.resend_active, data.provider);
   } catch {}
 }
 
-function updateConfigBadge(configured, email, resendActive) {
+function updateConfigBadge(configured, email, resendActive, provider) {
   const badge = document.getElementById('config-status-badge');
   if (!badge) return;
-  if (resendActive) {
-    badge.textContent = '⚡ Resend API active';
+  if (resendActive && provider) {
+    badge.textContent = `⚡ ${provider} active`;
     badge.className = 'cfg-badge cfg-ok';
   } else if (configured) {
     badge.textContent = `✓ ${email}`;

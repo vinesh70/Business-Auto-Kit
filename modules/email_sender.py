@@ -10,6 +10,44 @@ from pathlib import Path
 from datetime import datetime
 
 
+def send_via_sendgrid(
+    api_key: str,
+    from_email: str,
+    recipient_email: str,
+    subject: str,
+    html_body: str,
+    plain_body: str = "",
+) -> dict:
+    """Send via SendGrid HTTPS API — works on Render. Supports single-sender verification (no custom domain needed)."""
+    import urllib.request, urllib.error, json as _json
+    payload = _json.dumps({
+        "personalizations": [{"to": [{"email": recipient_email}]}],
+        "from": {"email": from_email, "name": "BusinessAutoKit"},
+        "subject": subject,
+        "content": [
+            {"type": "text/plain", "value": plain_body or subject},
+            {"type": "text/html",  "value": html_body},
+        ],
+    }).encode()
+    req = urllib.request.Request(
+        "https://api.sendgrid.com/v3/mail/send",
+        data=payload,
+        headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        urllib.request.urlopen(req, timeout=15)   # 202 = success, no body
+    except urllib.error.HTTPError as e:
+        body = e.read().decode(errors="replace")
+        try:
+            errs = _json.loads(body).get("errors", [{}])
+            msg  = errs[0].get("message", body) if errs else body
+        except Exception:
+            msg = body
+        raise RuntimeError(f"SendGrid {e.code}: {msg}") from None
+    return {"sent": True, "to": recipient_email, "subject": subject}
+
+
 _FREE_DOMAINS = {"gmail.com","yahoo.com","hotmail.com","outlook.com","live.com","icloud.com"}
 
 def send_via_resend(
