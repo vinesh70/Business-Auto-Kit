@@ -282,7 +282,10 @@ def save_email_config(data: EmailConfigIn):
 @app.post("/api/send-test-email")
 def send_test_email(data: SendTestIn):
     cfg = _load_cfg()
-    if not cfg.get("configured"):
+    brevo_key_check  = os.environ.get("BREVO_API_KEY")     or cfg.get("brevo_api_key")
+    sg_key_check     = os.environ.get("SENDGRID_API_KEY") or cfg.get("sendgrid_api_key")
+    resend_key_check = os.environ.get("RESEND_API_KEY")   or cfg.get("resend_api_key")
+    if not cfg.get("configured") and not any([brevo_key_check, sg_key_check, resend_key_check]):
         raise HTTPException(400, detail="Email not configured. Fill in your Gmail settings first.")
     plain = (
         "Hi there!\n\n"
@@ -384,7 +387,7 @@ def send_test_email(data: SendTestIn):
 </body>
 </html>"""
     subject     = "You just received an automated email — BusinessAutoKit Demo 🚀"
-    from_addr   = cfg.get("sender_email", "")
+    from_addr   = os.environ.get("SENDER_EMAIL") or cfg.get("sender_email", "")
     brevo_key   = os.environ.get("BREVO_API_KEY")     or cfg.get("brevo_api_key")
     sg_key      = os.environ.get("SENDGRID_API_KEY") or cfg.get("sendgrid_api_key")
     resend_key  = os.environ.get("RESEND_API_KEY")   or cfg.get("resend_api_key")
