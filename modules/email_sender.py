@@ -10,6 +10,42 @@ from pathlib import Path
 from datetime import datetime
 
 
+def send_via_brevo(
+    api_key: str,
+    from_email: str,
+    recipient_email: str,
+    subject: str,
+    html_body: str,
+    plain_body: str = "",
+) -> dict:
+    """Send via Brevo (Sendinblue) API — 300 emails/day free, single-sender verify, no domain needed."""
+    import urllib.request, urllib.error, json as _json
+    payload = _json.dumps({
+        "sender": {"email": from_email, "name": "BusinessAutoKit"},
+        "to": [{"email": recipient_email}],
+        "subject": subject,
+        "htmlContent": html_body,
+        "textContent": plain_body or subject,
+    }).encode()
+    req = urllib.request.Request(
+        "https://api.brevo.com/v3/smtp/email",
+        data=payload,
+        headers={"api-key": api_key, "Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            result = _json.loads(resp.read())
+    except urllib.error.HTTPError as e:
+        body = e.read().decode(errors="replace")
+        try:
+            msg = _json.loads(body).get("message", body)
+        except Exception:
+            msg = body
+        raise RuntimeError(f"Brevo {e.code}: {msg}") from None
+    return {"sent": True, "id": result.get("messageId"), "to": recipient_email, "subject": subject}
+
+
 def send_via_sendgrid(
     api_key: str,
     from_email: str,

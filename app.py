@@ -19,7 +19,7 @@ from modules.data_cleaner     import clean_contacts
 from modules.data_merger      import merge_csv_files
 from modules.file_organizer   import organize_folder
 from modules.report_generator import generate_sales_report
-from modules.email_sender     import send_email, send_via_resend, send_via_sendgrid
+from modules.email_sender     import send_email, send_via_brevo, send_via_resend, send_via_sendgrid
 
 BASE   = Path(__file__).parent
 SAMPLE = BASE / "sample_data"
@@ -258,11 +258,12 @@ def _load_cfg() -> dict:
 
 @app.get("/api/config/email")
 def get_email_config():
-    cfg       = _load_cfg()
-    sg_key    = os.environ.get("SENDGRID_API_KEY") or cfg.get("sendgrid_api_key")
-    resend_key= os.environ.get("RESEND_API_KEY")   or cfg.get("resend_api_key")
-    api_active = bool(sg_key or resend_key)
-    provider   = "SendGrid" if sg_key else ("Resend" if resend_key else None)
+    cfg        = _load_cfg()
+    brevo_key  = os.environ.get("BREVO_API_KEY")     or cfg.get("brevo_api_key")
+    sg_key     = os.environ.get("SENDGRID_API_KEY") or cfg.get("sendgrid_api_key")
+    resend_key = os.environ.get("RESEND_API_KEY")   or cfg.get("resend_api_key")
+    api_active = bool(brevo_key or sg_key or resend_key)
+    provider   = "Brevo" if brevo_key else ("SendGrid" if sg_key else ("Resend" if resend_key else None))
     return {
         "configured":    cfg.get("configured", False) or api_active,
         "sender_email":  cfg.get("sender_email", ""),
@@ -384,11 +385,13 @@ def send_test_email(data: SendTestIn):
 </html>"""
     subject     = "You just received an automated email — BusinessAutoKit Demo 🚀"
     from_addr   = cfg.get("sender_email", "")
+    brevo_key   = os.environ.get("BREVO_API_KEY")     or cfg.get("brevo_api_key")
     sg_key      = os.environ.get("SENDGRID_API_KEY") or cfg.get("sendgrid_api_key")
     resend_key  = os.environ.get("RESEND_API_KEY")   or cfg.get("resend_api_key")
     try:
-        if sg_key:
-            # Best for hosted: SendGrid — supports single-sender verification, no custom domain needed
+        if brevo_key:
+            send_via_brevo(brevo_key, from_addr, data.recipient_email, subject, html, plain)
+        elif sg_key:
             send_via_sendgrid(sg_key, from_addr, data.recipient_email, subject, html, plain)
         elif resend_key:
             # Alternative: Resend (requires verified domain for arbitrary from-address)
